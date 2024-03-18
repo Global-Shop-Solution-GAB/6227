@@ -1,0 +1,521 @@
+Program.Sub.ScreenSU.Start
+Gui.Form1..create
+Gui.Form1..caption("Serial Number Labels")
+Gui.Form1..size(4680,3945)
+Gui.Form1..minx(0)
+Gui.Form1..miny(0)
+Gui.Form1..position(0,0)
+Gui.Form1..forecolor(0)
+Gui.Form1..BackColor(-2147483633)
+Gui.Form1..maxbutton(False)
+Gui.Form1..mousepointer(0)
+Gui.Form1..sizeable(False)
+Gui.Form1..Event(UnLoad,cmdcancel_click)
+Gui.Form1.txtJob.create(textbox,"",True,1020,300,0,165,1065,False,0,Arial,8,-2147483643,1)
+Gui.Form1.txtJob.defaultvalue("")
+Gui.Form1.txtJob.TabStop(True)
+Gui.Form1.txtJob.TabIndex(1)
+Gui.Form1.txtJob.MaxLength(6)
+Gui.Form1.txtJob.Event(LostFocus,txtJob_LostFocus)
+Gui.Form1.txtSuffix.create(textbox,"",True,510,300,0,1230,1065,False,0,Arial,8,-2147483643,1)
+Gui.Form1.txtSuffix.defaultvalue("")
+Gui.Form1.txtSuffix.TabStop(True)
+Gui.Form1.txtSuffix.TabIndex(2)
+Gui.Form1.txtSuffix.MaxLength(3)
+Gui.Form1.txtSuffix.Event(LostFocus,txtSuffix_LostFocus)
+Gui.Form1.lblStartBin.create(label,"Work Order",True,945,255,0,165,840,True,0,Arial,8,-2147483633,0)
+Gui.Form1.lblStartBin.defaultvalue("")
+Gui.Form1.lblEndBin.create(label,"Suffix",True,930,255,0,1260,840,True,0,Arial,8,-2147483633,0)
+Gui.Form1.lblEndBin.defaultvalue("")
+Gui.Form1.luWorkOrder.create(button)
+Gui.Form1.luWorkOrder.caption("^")
+Gui.Form1.luWorkOrder.size(375,375)
+Gui.Form1.luWorkOrder.position(1770,1020)
+Gui.Form1.luWorkOrder.event(Click,luworkorder_click)
+Gui.Form1.luWorkOrder.defaultvalue("")
+Gui.Form1.luWorkOrder.TabStop(True)
+Gui.Form1.luWorkOrder.TabIndex(3)
+Gui.Form1.cmdPrint.create(button)
+Gui.Form1.cmdPrint.caption("Print")
+Gui.Form1.cmdPrint.size(855,375)
+Gui.Form1.cmdPrint.position(660,2685)
+Gui.Form1.cmdPrint.event(Click,cmdprint_click)
+Gui.Form1.cmdPrint.defaultvalue("")
+Gui.Form1.cmdPrint.TabStop(True)
+Gui.Form1.cmdPrint.TabIndex(7)
+Gui.Form1.cmdCancel.create(button)
+Gui.Form1.cmdCancel.caption("Cancel")
+Gui.Form1.cmdCancel.size(855,375)
+Gui.Form1.cmdCancel.position(2610,2685)
+Gui.Form1.cmdCancel.event(Click,cmdcancel_click)
+Gui.Form1.cmdCancel.defaultvalue("")
+Gui.Form1.cmdCancel.TabStop(True)
+Gui.Form1.cmdCancel.TabIndex(8)
+Gui.Form1.lbl3.create(label,"Serial Numbers by Work Order",True,2760,255,0,825,165,True,0,Arial,8,-2147483633,0)
+Gui.Form1.lbl3.defaultvalue("")
+Gui.Form1.txtEndJob.Create(TextBox,"",True,1020,300,0,2340,1065,False,0,"Arial",8,-2147483643,1)
+Gui.Form1.txtEndJob.TabStop(True)
+Gui.Form1.txtEndJob.TabIndex(4)
+Gui.Form1.txtEndJob.MaxLength(6)
+Gui.Form1.txtEndSuffix.Create(TextBox,"",True,510,300,0,3420,1065,False,0,"Arial",8,-2147483643,1)
+Gui.Form1.txtEndSuffix.TabStop(True)
+Gui.Form1.txtEndSuffix.TabIndex(5)
+Gui.Form1.txtEndSuffix.MaxLength(3)
+Gui.Form1.lblEndJob.Create(Label,"Work Order",True,1035,255,0,2370,855,True,0,"Arial",8,-2147483633,0)
+Gui.Form1.lblEndSuf.Create(Label,"Suffix",True,525,255,0,3420,855,True,0,"Arial",8,-2147483633,0)
+Gui.Form1.cmdBrwWOEnd.Create(Button)
+Gui.Form1.cmdBrwWOEnd.Size(375,375)
+Gui.Form1.cmdBrwWOEnd.Position(3975,1020)
+Gui.Form1.cmdBrwWOEnd.Caption("^")
+Gui.Form1.cmdBrwWOEnd.Event(Click,cmdBrwWOEnd_Click)
+Gui.Form1.cmdBrwWOEnd.TabStop(True)
+Gui.Form1.cmdBrwWOEnd.TabIndex(6)
+Gui.Form1.lbl1.Create(Label,"Composite WO Label Qty",True,2175,255,0,510,2325,True,0,"Arial",8,-2147483633,0)
+Gui.Form1.txtQty.Create(TextBox,"1",True,630,300,0,2820,2250,True,0,"Arial",8,-2147483643,1)
+Gui.Form1.txtQty.NumericOnly(2)
+Gui.Form1.txtQty.DefaultValue("")
+Gui.Form1.lbl_RFID.Create(Label,"RFID Labels",True,1440,255,0,1245,1950,True,0,"Arial",8,-2147483633,0)
+Gui.Form1.chkRFID.Create(CheckBox)
+Gui.Form1.chkRFID.Size(630,300)
+Gui.Form1.chkRFID.Position(2820,1860)
+Gui.Form1.chkRFID.DefaultValue("")
+Gui.Form1.chk_PartLbl.Create(CheckBox)
+Gui.Form1.chk_PartLbl.Size(540,360)
+Gui.Form1.chk_PartLbl.Position(2820,1485)
+Gui.Form1.chk_PartLbl.Event(Click,chk_PartLbl_Click)
+Gui.Form1.chk_PartLbl.Value(1)
+Gui.Form1.lblPrintPartLbl.Create(Label,"Print Part Label",True,1410,255,0,1005,1620,True,0,"Arial",8,-2147483633,0)
+Program.Sub.ScreenSU.End
+
+Program.Sub.Preflight.Start
+Variable.Global.BIRunID.Declare(Long,0)
+Variable.Global.BILogID.Declare(Long,0)
+Variable.UDT.uJobSerial.Define("Job",String,JOB)
+Variable.UDT.uJobSerial.Define("SUFFIX",String,SUFFIX)
+Variable.UDT.uJobSerial.Define("PART",String,PART)
+Variable.UDT.uJobSerial.Define("DESCRIPTION",String,DESCRIPTION)
+Variable.UDT.uJobSerial.Define("TEXT_INFO2",String,TEXT_INFO2)
+Variable.UDT.uJobSerial.Define("SERIAL",String,SERIAL_START)
+Variable.UDT.uJobSerial.Define("CUSTOMER",String,SERIAL_START)
+Variable.UDT.uJobSerial.Define("SERIAL",String,SERIAL_START)
+Variable.UDT.uJobSerial.Define("SO",String,SERIAL_START)
+Variable.UDT.uJobSerial.Define("SALES_ORDER_LINE",String,SERIAL_START)
+Variable.UDT.uJobSerial.Define("NAME_CUSTOMER",String,SERIAL_START)
+Variable.uGlobal.uJobSerial.Declare("uJobSerial")
+Variable.Global.sJob.Declare(String)
+Variable.Global.sSuffix.Declare(String)
+Variable.Global.sEndJob.Declare(String)
+Variable.Global.sEndSuf.Declare(String)
+Variable.Global.sStart.Declare(String)
+Variable.Global.sEnd.Declare(String)
+Variable.Global.iBIRunID.Declare(Long,0)
+Variable.Global.iBILogID.Declare(Long,0)
+Variable.Global.bSentinel.Declare(Boolean,False)
+Variable.Global.sRFIDPrinter.Declare(String)
+Variable.Global.sNormalPrinter.Declare(String)
+Variable.Global.bPrinter.Declare(Boolean,False)
+Variable.Global.bLabel.Declare(Boolean,False)
+Variable.Global.bRFID.Declare(Boolean,False)
+'JOB*!*SUFFIX*!*PART*!*DESCRIPTION*!*TEXT_INFO2*!*SERIAL
+Program.Sub.Preflight.End
+
+Program.Sub.Main.Start
+F.Intrinsic.Control.SetErrorHandler("Main_Err")
+F.Intrinsic.Control.ClearErrors
+
+	V.Local.bInGroup.Declare
+	V.Local.sError.Declare(String)
+	V.Local.sGroup.Declare
+	V.Local.sSQL.Declare
+	
+	F.Intrinsic.Control.If(V.Caller.Hook,=,15790)
+		V.Passed.000048.Set("RFID")
+		F.Intrinsic.Control.End
+	F.Intrinsic.Control.EndIf
+	
+	F.ODBC.Connection!conx.OpenConnection(V.Ambient.PDSN,V.Ambient.PUser,V.Ambient.PPass)
+	
+	F.Intrinsic.UI.InvokeWaitDialog("Loading User Security","RFID Labels")
+	'validate user/group status before running the program
+	V.Local.sSQL.Set("select * from GCG_6227_RFID_LABEL_GROUP")
+	F.ODBC.Connection!conx.OpenLocalRecordsetRO("rstSel",V.Local.sSQL)
+	F.Intrinsic.Control.DoUntil(V.ODBC.conx!rstSel.EOF,=,True)
+		F.Global.Security.IsInGroup(V.Caller.User,V.ODBC.conx!rstSel.FieldValTrim!GS_GROUP,V.Caller.CompanyCode,V.Local.bInGroup)
+		F.Intrinsic.Control.If(V.Local.bInGroup,=,True)
+			V.Global.sRFIDPrinter.Set(V.ODBC.conx!rstSel.FieldValTrim!RFID_PRINTER)
+			V.Global.sNormalPrinter.Set(V.ODBC.conx!rstSel.FieldValTrim!LABEL_PRINTER)
+			V.Global.bRFID.Set(V.ODBC.conx!rstSel.FieldVal!RFID)
+			V.Global.bLabel.Set(V.ODBC.conx!rstSel.FieldVal!LABELS)
+		F.Intrinsic.Control.EndIf
+		F.ODBC.conx!rstSel.MoveNext
+	F.Intrinsic.Control.Loop
+	
+	F.Intrinsic.Control.If(V.Global.sRFIDPrinter.Trim,=,"",and,V.Global.sNormalPrinter.Trim,=,"")
+		F.Intrinsic.UI.Msgbox("You are not assigned to a printer group","NOT AUTHORIZED")
+		F.Intrinsic.Control.CallSub(cmdCancel_click)
+	F.Intrinsic.Control.EndIf
+	
+	F.Intrinsic.UI.CloseWaitDialog
+	
+	Gui.Form1..Show
+	
+	F.Intrinsic.Control.ExitSub
+
+F.Intrinsic.Control.Label("Main_Err")
+F.Intrinsic.Control.If(V.Ambient.ErrorNumber,<>,0)
+	Function.Intrinsic.String.Concat("Project: GCG_6227_JOB_SERIAL_LABEL.g2u",V.Ambient.Newline,V.Ambient.Newline,"Subroutine: ",V.Ambient.CurrentSubroutine,V.Ambient.NewLine,"Error Occurred ",V.Ambient.ErrorNumber," with description ",V.Ambient.ErrorDescription,V.Local.sError)
+	F.Intrinsic.UI.Msgbox(V.Local.sError)
+Function.Intrinsic.Control.EndIf
+
+V.Local.sCon.Declare(String)
+
+Program.Sub.Main.End
+
+Program.Sub.cmdprint_click.Start
+F.Intrinsic.Control.SetErrorHandler("cmdprint_click_Err")
+F.Intrinsic.Control.ClearErrors
+
+	V.Local.sError.Declare(String)
+	V.Local.sSql.Declare(String)
+	V.Local.sElementList.Declare(String)
+	V.Local.iBIRptID.Declare(Long)
+	V.Local.sSequence.Declare(String)
+	
+	'Get run ID
+	F.Global.BI.GetRunID(V.Global.BIRunID)
+
+'	'Starting BI Logging
+'	F.Global.BI.StartLogging(V.Global.BIRunID,V.Local.iBIRptID,-1,"",V.Global.BILogID)
+	
+	'set the range
+	V.Global.sJob.Set(V.Screen.Form1!txtJob.Text)
+	V.Global.sSuffix.Set(V.Screen.Form1!txtSuffix.Text)
+	v.Global.sEndJob.Set(v.Screen.Form1!txtEndJob.Text)
+	v.Global.sEndSuf.Set(v.Screen.Form1!txtEndSuffix.Text)
+	f.Intrinsic.String.Build("{0}{1}",V.Global.sJob,V.Global.sSuffix,V.Global.sStart)
+	F.Intrinsic.String.Build("{0}{1}",V.Global.sEndJob,V.Global.sEndSuf,V.Global.sEnd)
+	
+	'Check to print part labels. If False, only print BC Router label and close
+	f.Intrinsic.Control.If(v.Screen.Form1!chk_PartLbl.checkedasboolean,=,False)
+		'Print BC Router Label
+		f.Intrinsic.Control.CallSub(print_router)
+	f.Intrinsic.Control.EndIf
+	
+	'Gui.Form1..Visible(false)
+	V.Local.sSequence.Set("000000")
+	
+	F.Intrinsic.Control.If(V.Screen.Form1!chkRFID.CheckedAsBoolean,=,True) 'Serialized parts - RFID labels
+		F.Global.BI.GetIDFromName("GAB_RFID_SERIAL.lab",V.Local.iBIRptID)
+		'Starting BI Logging
+		F.Global.BI.StartLogging(V.Global.BIRunID,V.Local.iBIRptID,-1,"",V.Global.BILogID)
+	
+		'Creat sql statement, open connection, load udt
+		f.Intrinsic.Control.If(v.Global.sStart,=,v.Global.sEnd)
+			f.Intrinsic.String.Build("select JH.JOB, JH.SUFFIX, JH.PART, IT.TEXT AS DESCRIPTION, I2.TEXT_INFO2, JS.SERIAL_START AS SERIAL, RTRIM(JH.SALES_ORDER) AS SO, JH.SALES_ORDER_LINE, CM.NAME_CUSTOMER FROM V_JOB_HEADER JH LEFT JOIN V_INVENTORY_MST2 I2 ON JH.PART = I2.PART AND JH.LOCATION = I2.LOCATION LEFT JOIN V_INV_EXTRA_TEXT IT ON JH.PART = IT.PART LEFT JOIN V_CUSTOMER_MASTER CM ON JH.CUSTOMER = CM.CUSTOMER LEFT JOIN V_JOB_SERIAL JS ON JH.JOB = JS.JOB AND JH.SUFFIX = JS.SUFFIX WHERE JH.JOB = '{0}' AND JH.SUFFIX = '{1}' AND JS.SEQUENCE = '{2}' AND SERIAL > ''",V.Global.sJob,V.Global.sSuffix,V.Local.sSequence,V.Local.sSql)
+		Function.Intrinsic.Control.Else 
+			f.Intrinsic.String.Build("select JH.JOB, JH.SUFFIX, JH.PART, IT.TEXT AS DESCRIPTION, I2.TEXT_INFO2, JS.SERIAL_START AS SERIAL, RTRIM(JH.SALES_ORDER) AS SO, JH.SALES_ORDER_LINE, CM.NAME_CUSTOMER FROM V_JOB_HEADER JH LEFT JOIN V_INVENTORY_MST2 I2 ON JH.PART = I2.PART AND JH.LOCATION = I2.LOCATION LEFT JOIN V_INV_EXTRA_TEXT IT ON JH.PART = IT.PART LEFT JOIN V_CUSTOMER_MASTER CM ON JH.CUSTOMER = CM.CUSTOMER LEFT JOIN V_JOB_SERIAL JS ON JH.JOB = JS.JOB AND JH.SUFFIX = JS.SUFFIX WHERE CONCAT(JH.JOB,JH.SUFFIX) BETWEEN '{0}' AND '{1}' AND JS.SEQUENCE = '{2}' AND SERIAL > ''",V.Global.sStart,V.Global.sEnd,V.Local.sSequence,V.Local.sSql)
+		Function.Intrinsic.Control.EndIf
+		
+	F.Intrinsic.Control.Else	'Non-Serialized parts - Non-RFID labels
+		F.Global.BI.GetIDFromName("GAB_RFID_NO_SERIAL.lab",V.Local.iBIRptID)
+		'Starting BI Logging
+		F.Global.BI.StartLogging(V.Global.BIRunID,V.Local.iBIRptID,-1,"",V.Global.BILogID)
+
+		f.Intrinsic.Control.If(v.Global.sStart,=,v.Global.sEnd)
+			f.Intrinsic.String.Build("select JH.JOB, JH.SUFFIX, JH.PART, IT.TEXT AS DESCRIPTION, I2.TEXT_INFO2, RTRIM(JH.SALES_ORDER) AS SO, JH.SALES_ORDER_LINE, CM.NAME_CUSTOMER FROM V_JOB_HEADER JH LEFT JOIN V_INVENTORY_MST2 I2 ON JH.PART = I2.PART AND JH.LOCATION = I2.LOCATION LEFT JOIN V_INV_EXTRA_TEXT IT ON JH.PART = IT.PART LEFT JOIN V_CUSTOMER_MASTER CM ON JH.CUSTOMER = CM.CUSTOMER WHERE JH.JOB = '{0}' AND JH.SUFFIX = '{1}'",V.Global.sJob,V.Global.sSuffix,V.Local.sSql)
+		Function.Intrinsic.Control.Else
+			f.Intrinsic.String.Build("select JH.JOB, JH.SUFFIX, JH.PART, IT.TEXT AS DESCRIPTION, I2.TEXT_INFO2, RTRIM(JH.SALES_ORDER) AS SO, JH.SALES_ORDER_LINE, CM.NAME_CUSTOMER FROM V_JOB_HEADER JH LEFT JOIN V_INVENTORY_MST2 I2 ON JH.PART = I2.PART AND JH.LOCATION = I2.LOCATION LEFT JOIN V_INV_EXTRA_TEXT IT ON JH.PART = IT.PART LEFT JOIN V_CUSTOMER_MASTER CM ON JH.CUSTOMER = CM.CUSTOMER WHERE CONCAT(JH.JOB,JH.SUFFIX) BETWEEN '{0}' AND '{1}'",V.Global.sStart,V.Global.sEnd,V.Local.sSql)
+		Function.Intrinsic.Control.EndIf
+	F.Intrinsic.Control.EndIf
+	
+
+	'Create data table for serial lables
+	f.Data.DataTable.CreateFromSQL("SERIAL","CONX",V.Local.sSql,True)
+	
+	F.Intrinsic.Control.If(V.DataTable.SERIAL.RowCount,>,20)
+		f.Intrinsic.UI.Msgbox("Too many records were returned.  Double check your selection and try again","BAD WORK ORDER RANGE")
+		F.Intrinsic.Control.CallSub(cmdcancel_click)
+	F.Intrinsic.Control.Elseif(v.DataTable.SERIAL.RowCount,<,1)
+		f.Intrinsic.UI.Msgbox("No records returned. Double check your selection and try again","BAD WORK ORDER RANGE")
+	f.Intrinsic.Control.Else
+		F.Intrinsic.Control.If(V.Screen.Form1!chkRFID.CheckedAsBoolean,=,True)
+			'print RFID labels
+			F.Global.BI.PrintCodesoftLabelFromDataTable(V.global.BIRunID,V.global.BILogID,"SERIAL",v.Global.sRFIDPrinter,True)
+		F.Intrinsic.Control.Else
+			'print Non-RFID labels
+			F.Global.BI.PrintCodesoftLabelFromDataTable(V.global.BIRunID,V.global.BILogID,"SERIAL",v.Global.sNormalPrinter,True)
+		F.Intrinsic.Control.EndIf
+		F.Data.DataTable.Close("SERIAL")
+	F.Intrinsic.Control.EndIf
+	
+	'print BC Router label and close
+	f.Intrinsic.Control.CallSub(print_router)
+	
+	F.Intrinsic.Control.ExitSub
+
+F.Intrinsic.Control.Label("cmdprint_click_Err")
+F.Intrinsic.Control.If(V.Ambient.ErrorNumber,<>,0)
+	Function.Intrinsic.String.Concat("Project: GCG_6227_JOB_SERIAL_LABEL.g2u",V.Ambient.Newline,V.Ambient.Newline,"Subroutine: ",V.Ambient.CurrentSubroutine,V.Ambient.NewLine,"Error Occurred ",V.Ambient.ErrorNumber," with description ",V.Ambient.ErrorDescription,V.Local.sError)
+	F.Intrinsic.UI.Msgbox(V.Local.sError)
+Function.Intrinsic.Control.EndIf
+
+Program.Sub.cmdprint_click.End
+
+Program.Sub.cmdcancel_click.Start
+	F.ODBC.Connection!conx.Close
+	F.Intrinsic.Control.End
+Program.Sub.cmdcancel_click.End
+
+Program.Sub.luworkorder_click.Start
+F.Intrinsic.Control.SetErrorHandler("lustartbin_click_Err")
+F.Intrinsic.Control.ClearErrors
+
+	V.Local.sError.Declare(String)
+	V.Local.sSql.Declare(String)
+	V.Local.sTitles.Declare(String)
+	V.Local.iWidths.Declare(Long)
+	V.Local.sRet.Declare(String)
+	
+	
+	'select the starting job/suffix
+	V.Local.sSql.Set("select distinct FLAG_WO_PRTD AS PRINTED, JOB, SUFFIX, PART, DESCRIPTION, DATE_DUE FROM V_JOB_HEADER WHERE DATE_CLOSED = '1900-01-01' order by JOB, SUFFIX")
+	'F.Intrinsic.String.Concat(V.Local.sSql,"from JOB_HEADER",V.Local.sSql)
+	F.Intrinsic.String.Split("PRINTED*!*JOB*!*SUFFIX*!*PART*!*DESCRIPTION*!*DATE_DUE","*!*",V.Local.sTitles)
+	F.Intrinsic.String.Split("400*!*800*!*800*!*1000*!*2800*!*800","*!*",V.Local.iWidths)
+	F.Intrinsic.UI.SetBrowserHotTypeAhead(True)
+	F.Intrinsic.UI.Browser("Select Work Order","conx",V.Local.sSql,V.Local.sTitles,V.Local.iWidths,V.Local.sRet)
+	
+	F.Intrinsic.Control.If(V.Local.sRet,"=","***CANCEL***")
+		F.Intrinsic.UI.Msgbox("No Work Order was selected")
+	F.Intrinsic.Control.Else
+		F.Intrinsic.String.Split(V.Local.sRet,"*!*",V.Local.sRet)
+		Gui.Form1.txtJob.Text(V.Local.sRet(1))
+		Gui.Form1.txtSuffix.Text(V.Local.sRet(2))
+		gui.Form1.txtEndJob.Text(v.Local.sRet(1))
+		gui.Form1.txtEndSuffix.Text(v.Local.sRet(2))
+		
+		F.Intrinsic.String.Build("Select FLAG_SERIALIZE From JOB_HEADER Where JOB = '{0}' and SUFFIX = '{1}';",V.Local.sRet(1),V.Local.sRet(2),V.Local.sSql)
+		F.ODBC.Connection!conx.ExecuteAndReturn(V.Local.sSql,V.Local.sRet)
+		F.Intrinsic.Control.If(V.Local.sRet,=,"Y")
+			Gui.Form1.chkRFID.Value(True)
+		F.Intrinsic.Control.Else
+			Gui.Form1.chkRFID.Value(False)
+		F.Intrinsic.Control.EndIf
+			
+	F.Intrinsic.Control.EndIf
+	
+	F.Intrinsic.Control.ExitSub
+
+F.Intrinsic.Control.Label("lustartbin_click_Err")
+F.Intrinsic.Control.If(V.Ambient.ErrorNumber,<>,0)
+Function.Intrinsic.String.Concat("Project: GCG_6227_JOB_SERIAL_LABEL.g2u",V.Ambient.Newline,V.Ambient.Newline,"Subroutine: ",V.Ambient.CurrentSubroutine,V.Ambient.NewLine,"Error Occurred ",V.Ambient.ErrorNumber," with description ",V.Ambient.ErrorDescription,V.Local.sError)
+F.Intrinsic.UI.Msgbox(V.Local.sError)
+Function.Intrinsic.Control.EndIf
+
+Program.Sub.luworkorder_click.End
+
+Program.Sub.print_router.Start
+F.Intrinsic.Control.SetErrorHandler("print_router_Err")
+F.Intrinsic.Control.ClearErrors
+
+	V.Local.iQty.Declare
+	v.Local.sError.Declare
+	v.Local.sSql.Declare
+	v.Local.sJob.Declare
+	v.Local.sSuffix.Declare
+	v.Local.sTemp.Declare
+	v.Local.sSeq.Declare
+	v.Local.sLMO.Declare
+	v.Local.sPart.Declare
+	v.Local.sOP.Declare
+	v.Local.sDesc.Declare
+	v.Local.sJSS.Declare
+	v.Local.sSerial.Declare
+	'v.Local.BulkDeclareString(sError,sSql,sJob,sSuffix,sTemp,sSeq,sLMO,sPart,sOP,sDesc,sJSS,sSerial)
+	v.Local.iCount.Declare
+	v.Local.iC.Declare
+	v.Local.iBIRptID.Declare
+	'v.Local..BulkDeclareLong(iCount,iC,iBIRptID)
+	
+	f.Intrinsic.Control.If(v.Screen.Form1!txtQty.text,=,"0")
+		f.Intrinsic.Control.CallSub(cmdCancel_click)
+	f.Intrinsic.Control.EndIf
+	'Get run ID
+	F.Global.BI.GetRunID(V.Global.iBIRunID)
+	
+	F.Global.BI.GetIDFromName("SF_Work_Order_Compos2.lab",V.Local.iBIRptID)
+	'Starting BI Logging
+	F.Global.BI.StartLogging(V.Global.iBIRunID,V.Local.iBIRptID,-1,"",V.Global.iBILogID)
+	
+	'create the base data table
+	F.Intrinsic.Control.If(V.Global.sStart,=,V.Global.sEnd)
+	f.Intrinsic.String.Build("select JOB AS WO, SUFFIX AS WO_SUFFIX, QTY_ORDER AS QTY_ON_LABEL, PART, DESCRIPTION AS DESCR, DATE_OPENED AS DATE1, DATE_DUE AS DATE2 FROM V_JOB_HEADER WHERE CONCAT(JOB,SUFFIX) = '{0}'",V.Global.sStart,V.Local.sSql)
+	Function.Intrinsic.Control.Else
+	f.Intrinsic.String.Build("select JOB AS WO, SUFFIX AS WO_SUFFIX, QTY_ORDER AS QTY_ON_LABEL, PART, DESCRIPTION AS DESCR FROM V_JOB_HEADER WHERE CONCAT(JOB,SUFFIX) BETWEEN '{0}' AND '{1}' AND DATE_CLOSED = '1900-01-01' ",V.Global.sStart,V.Global.sEnd,V.Local.sSql)
+	Function.Intrinsic.Control.EndIf
+	F.Data.DataTable.CreateFromSQL("JOB","CONX",V.Local.sSql,True)
+	
+	'checking the row count of JOB to make sure they haven't exceeded 20 jobs.
+	f.Intrinsic.Control.If(v.DataTable.JOB.RowCount,>,20)
+		f.Intrinsic.UI.Msgbox("Too many records were returned.  Double check your selection and try again","BAD WORK ORDER RANGE")
+		F.Intrinsic.Control.CallSub(cmdcancel_click)
+	f.Intrinsic.Control.EndIf
+	
+	
+	f.Intrinsic.Control.For(v.Local.iC,0,7,1)
+		f.Intrinsic.String.Build("{0}SEQ",V.Local.iC,V.Local.sTemp)
+		F.Data.DataTable.AddColumn("JOB",V.Local.sTemp,"STRING")
+		F.Intrinsic.String.Build("{0}DESC",V.Local.iC,V.Local.sTemp)
+		F.Data.DataTable.AddColumn("JOB",V.Local.sTemp,"STRING")
+		F.Intrinsic.String.Build("{0}OPER",V.Local.iC,V.Local.sTemp)
+		F.Data.DataTable.AddColumn("JOB",V.Local.sTemp,"STRING")
+	F.Intrinsic.Control.Next(V.Local.iC)
+	
+	f.Data.DataTable.AddColumn("JOB","SERIALNUM","STRING")
+	
+	'start building the operations for each job
+	f.Intrinsic.Control.For(v.Local.iC,0,v.DataTable.JOB.RowCount--,1)
+		v.Local.sJob.Set(v.DataTable.JOB(V.Local.iC).WO!FIELDVALTRIM)
+		V.Local.sSuffix.Set(V.DataTable.JOB(V.Local.iC).WO_SUFFIX!FIELDVALTRIM)
+		'GET THE OPERATIONS
+		F.Intrinsic.String.Build("Select SEQ, PART, DESCRIPTION, OPERATION, LMO FROM V_JOB_OPERATIONS WHERE JOB = '{0}' AND SUFFIX = '{1}' AND LMO = 'L' and SEQ < '990000' order by SEQ",V.Local.sJob,V.Local.sSuffix,V.Local.sSql)
+		F.Intrinsic.Control.If(V.DataTable.OPS.exists,=,True)
+			F.Data.DataTable.DeleteRow("OPS")
+			F.Data.DataTable.Close("OPS")
+		F.Intrinsic.Control.EndIf
+		F.Data.DataTable.CreateFromSQL("OPS","CONX",V.Local.sSql,True)
+	
+		F.Intrinsic.Control.For(V.Local.iCount,0,V.DataTable.OPS.RowCount--,1)
+			F.Intrinsic.Control.If(V.Local.iCount,<,8)
+				v.Local.sSeq.Set(v.DataTable.OPS(V.Local.iCount).SEQ!FIELDVALTRIM)
+				Function.Intrinsic.Control.If(v.DataTable.JOB(V.Local.iC).WO_SUFFIX!FIELDVALTRIM,>,"")
+					f.Intrinsic.String.Build("{0}{1}{2}{3}","$%",v.DataTable.JOB(V.Local.iC).WO!FIELDVALTRIM,V.DataTable.JOB(V.Local.iC).WO_SUFFIX!FIELDVALTRIM,V.Local.sSeq,V.Local.sJSS)
+				Function.Intrinsic.Control.Else
+					f.Intrinsic.String.Build("{0}{1}{2}{3}","$%",v.DataTable.JOB(V.Local.iC).WO!FIELDVALTRIM,"   ",V.Local.sSeq,V.Local.sJSS)
+				Function.Intrinsic.Control.EndIf
+				F.Intrinsic.String.Build("{0}SEQ",V.Local.iCount,V.Local.sTemp)
+				f.Data.DataTable.SetValue("JOB",V.Local.iC,V.Local.sTemp,V.Local.sJSS)
+				V.Local.sLMO.Set(V.DataTable.OPS(V.Local.iCount).LMO!FIELDVALTRIM)
+				V.Local.sPart.Set(V.DataTable.OPS(V.Local.iCount).PART!FIELDVALTRIM)
+				V.Local.sOP.Set(V.DataTable.OPS(V.Local.iCount).OPERATION!FIELDVALTRIM)
+				V.Local.sDesc.Set(v.DataTable.OPS(V.Local.iCount).DESCRIPTION!FIELDVALTRIM)
+				F.Intrinsic.String.Build("{0}{1}",V.Local.iCount,"DESC",V.Local.sTemp)
+				F.Data.DataTable.SetValue("JOB",V.Local.iC,V.Local.sTemp,V.Local.sDesc)
+				F.Intrinsic.String.RPad(V.Local.sSeq," ",10,V.Local.sSeq)
+				F.Intrinsic.String.RPad(V.Local.sLMO," ",5,V.Local.sLMO)
+				F.Intrinsic.String.RPad(V.Local.sPart," ",10,V.Local.sPart)
+				F.Intrinsic.String.RPad(V.Local.sOP," ",10,V.Local.sOP)
+				F.Intrinsic.String.Build("{0}{1}",V.Local.iCount,"OPER",V.Local.sTemp)
+				F.Intrinsic.String.Build("{0}{1}{2}{3}",v.Local.sSeq,v.Local.sLMO,v.Local.sPart,v.Local.sOP,v.Local.sOP)
+				F.Intrinsic.String.Trim(V.Local.sOP,V.Local.sOP)
+				F.Data.DataTable.SetValue("JOB",V.Local.iC,V.Local.sTemp,V.Local.sOP)
+			Function.Intrinsic.Control.EndIf
+		F.Intrinsic.Control.Next(V.Local.iCount)
+	
+		'add the associated serial numbers
+	
+		f.Intrinsic.String.Build("select SERIAL_END from V_JOB_SERIAL where JOB = '{0}' AND SUFFIX = '{1}' AND SEQUENCE = '{2}'",V.Local.sJob,V.Local.sSuffix,"000000",V.Local.sSql)
+		F.ODBC.Connection!conx.ExecuteAndReturn(V.Local.sSql,V.Local.sSerial)
+		f.Intrinsic.Control.If(v.Local.sSerial,>,"")
+			F.Intrinsic.String.Replace(V.Local.sSerial,"*!*#$#","     ",V.Local.sSerial)
+			F.Intrinsic.String.Replace(V.Local.sSerial,"*!*","",V.Local.sSerial)
+		F.Data.DataTable.SetValue("JOB",V.Local.iC,"SERIALNUM",V.Local.sSerial)
+	F.Intrinsic.Control.EndIf
+	
+	f.Intrinsic.Control.Next(v.Local.iC)
+	'print the label
+	Function.Global.BI.StopLogging(v.Global.iBILogID)
+	
+	V.Local.iQty.Set(V.Screen.Form1!txtQty.Text)
+	F.Intrinsic.Control.If(V.Local.iQty,>,1)
+		F.Data.DataTable.Clone("JOB","dtTemp",True)
+		F.Intrinsic.Control.For(V.Local.iC,2,V.Local.iQty,1)
+			F.Data.DataTable.Merge("JOB","dtTemp",True,1)
+		F.Intrinsic.Control.Next(V.Local.iC)
+		F.Data.DataTable.Merge("dtTemp","JOB",True,1)
+		F.Data.DataTable.DeleteRow("dtTemp")
+		F.Data.DataTable.Close("dtTemp")
+	F.Intrinsic.Control.EndIf
+	
+	F.Intrinsic.Control.If(V.Global.bLabel,=,True)
+		F.Global.BI.PrintCodesoftLabelFromDataTable(v.Global.iBIRunID, v.Global.iBILogID,"JOB",v.Global.sNormalPrinter,True)
+		F.Intrinsic.Control.For(V.Local.iC,0,V.DataTable.JOB.RowCount--,1)
+			F.Intrinsic.String.Build("update JOB_HEADER set FLAG_WO_PRTD = 'Y' where FLAG_WO_PRTD = '' and JOB = '{0}' and SUFFIX = '{1}'",V.DataTable.JOB(V.Local.iC).WO!FieldValTrim,V.DataTable.JOB(V.Local.iC).WO_SUFFIX!FieldValTrim,V.Local.sSql)
+			F.ODBC.Connection!conx.Execute(V.Local.sSql)
+		F.Intrinsic.Control.Next(V.Local.iC)
+		F.Data.DataTable.Close("JOB")
+	F.Intrinsic.Control.EndIf	
+	
+	F.Intrinsic.Control.CallSub(cmdcancel_click)
+	
+	F.Intrinsic.Control.ExitSub
+
+F.Intrinsic.Control.Label("print_router_Err")
+F.Intrinsic.Control.If(V.Ambient.ErrorNumber,<>,0)
+	Function.Intrinsic.String.Concat("Project: GCG_6227_JOB_SERIAL_LABEL.g2u",V.Ambient.Newline,V.Ambient.Newline,"Subroutine: ",V.Ambient.CurrentSubroutine,V.Ambient.NewLine,"Error Occurred ",V.Ambient.ErrorNumber," with description ",V.Ambient.ErrorDescription,V.Local.sError)
+	F.Intrinsic.UI.Msgbox(V.Local.sError)
+Function.Intrinsic.Control.EndIf
+Program.Sub.print_router.End
+
+Program.Sub.cmdBrwWOEnd_Click.Start
+F.Intrinsic.Control.SetErrorHandler("luworkorder_click_Err")
+F.Intrinsic.Control.ClearErrors
+
+	V.Local.BulkDeclareString(sError,sRet,sSql,sTitles)
+	v.Local.iWidths.Declare(Long)
+	
+	'select the ending job/suffix
+	V.Local.sSql.Set("select distinct FLAG_WO_PRTD AS PRINTED, JOB, SUFFIX, PART, DESCRIPTION, DATE_DUE FROM V_JOB_HEADER WHERE DATE_CLOSED = '1900-01-01' order by JOB, SUFFIX")
+	'F.Intrinsic.String.Concat(V.Local.sSql,"from JOB_HEADER",V.Local.sSql)
+	F.Intrinsic.String.Split("PRINTED*!*JOB*!*SUFFIX*!*PART*!*DESCRIPTION*!*DATE_DUE","*!*",V.Local.sTitles)
+	F.Intrinsic.String.Split("400*!*800*!*800*!*1000*!*2800*!*800","*!*",V.Local.iWidths)
+	F.Intrinsic.UI.SetBrowserHotTypeAhead(True)
+	F.Intrinsic.UI.Browser("Select Work Order","conx",V.Local.sSql,V.Local.sTitles,V.Local.iWidths,V.Local.sRet)
+	
+	F.Intrinsic.Control.If(V.Local.sRet,"=","***CANCEL***")
+		F.Intrinsic.UI.Msgbox("No Work Order was selected")
+	F.Intrinsic.Control.Else
+		F.Intrinsic.String.Split(V.Local.sRet,"*!*",V.Local.sRet)
+		gui.Form1.txtEndJob.Text(v.Local.sRet(1))
+		gui.Form1.txtEndSuffix.Text(v.Local.sRet(2))
+	F.Intrinsic.Control.EndIf
+
+	F.Intrinsic.Control.ExitSub
+
+F.Intrinsic.Control.Label("luworkorder_click_Err")
+F.Intrinsic.Control.If(V.Ambient.ErrorNumber,<>,0)
+	Function.Intrinsic.String.Concat("Project: GCG_6227_JOB_SERIAL_LABEL.g2u",V.Ambient.Newline,V.Ambient.Newline,"Subroutine: ",V.Ambient.CurrentSubroutine,V.Ambient.NewLine,"Error Occurred ",V.Ambient.ErrorNumber," with description ",V.Ambient.ErrorDescription,V.Local.sError)
+	F.Intrinsic.UI.Msgbox(V.Local.sError)
+Function.Intrinsic.Control.EndIf
+Program.Sub.cmdBrwWOEnd_Click.End
+
+Program.Sub.txtJob_LostFocus.Start
+	F.Intrinsic.Control.If(V.Screen.Form1!txtJob.Text,<>,"")
+	F.Intrinsic.Control.AndIf(V.Screen.Form1!txtEndJob.Text,=,"")
+		gui.Form1.txtEndJob.Text(V.Screen.Form1!txtJob.Text)
+	F.Intrinsic.Control.EndIf
+Program.Sub.txtJob_LostFocus.End
+
+Program.Sub.txtSuffix_LostFocus.Start
+	F.Intrinsic.Control.If(V.Screen.Form1!txtSuffix.Text,<>,"")
+	F.Intrinsic.Control.AndIf(V.Screen.Form1!txtEndSuffix.Text,=,"")
+		gui.Form1.txtEndSuffix.Text(V.Screen.Form1!txtSuffix.Text)
+	F.Intrinsic.Control.EndIf
+Program.Sub.txtSuffix_LostFocus.End
+
+Program.Sub.chk_PartLbl_Click.Start
+	F.Intrinsic.Control.If(V.Screen.Form1!chk_PartLbl.Value,=,True)
+		Gui.Form1.chkRFID.Enabled(False)
+		Gui.Form1.lbl_RFID.Enabled(False)
+	F.Intrinsic.Control.Else
+		Gui.Form1.chkRFID.Enabled(True)
+		Gui.Form1.lbl_RFID.Enabled(True)
+	F.Intrinsic.Control.EndIf
+	
+	F.Intrinsic.Control.ExitSub
+Program.Sub.chk_PartLbl_Click.End
+
+Program.Sub.Comments.Start
+${$0$}$GAB_BIN_MASTER_LABEL$}$DFINCH$}$4/25/2015$}$False
+${$3$}$0$}$$}$0$}$-1$}$$}$12:00:00 AM$}$This will be a custom GAB script that will run from a custom Menu Item under Bill of Material -> File -> Custom Cobalt BOM Import.  The user will navigate to the xml file that needs to be loaded into Global Shop.  Once the xml is parsed there will be a search in Global Shop to see if a BOM already exists for that Part Number.  If one already exists a compare screen will display showing the differences between the two.  If one does not exist then the screen will display the BOM as it will be uploaded into Global Shop.  Any parts that are listed in the BOM that are not Inventory Parts will be highlighted in Yellow.  If there are any parts not in inventory the user will have the option to click the create Parts button to generate those parts in Global Shop.  If the BOM exists in Global shop then any differences on the new import will be highlighted in Red.  After the Parts have been created then the Upload button will upload and override any previous BOM for that part.
+Program.Sub.Comments.End
