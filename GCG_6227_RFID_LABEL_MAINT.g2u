@@ -1,0 +1,296 @@
+Program.Sub.ScreenSU.Start
+Gui.fMain..Create
+Gui.fMain..Caption("Label Printer Maintenance")
+Gui.fMain..Size(10020,6210)
+Gui.fMain..MinX(0)
+Gui.fMain..MinY(0)
+Gui.fMain..Position(0,0)
+Gui.fMain..BackColor(-2147483633)
+Gui.fMain..MousePointer(0)
+Gui.fMain..Event(UnLoad,fMain_UnLoad)
+Gui.fMain.GsGcMain.Create(GsGridControl)
+Gui.fMain.GsGcMain.Size(9780,5115)
+Gui.fMain.GsGcMain.Position(30,60)
+Gui.fMain.GsGcMain.Anchor(15)
+Gui.fMain.GsGcMain.Anchor(15)
+Gui.fMain.cmdSave.Create(Button)
+Gui.fMain.cmdSave.Size(1035,375)
+Gui.fMain.cmdSave.Position(8775,5295)
+Gui.fMain.cmdSave.Caption("Save")
+Gui.fMain.cmdSave.Event(Click,cmdSave_Click)
+Gui.fMain.cmdSave.Anchor(10)
+Program.Sub.ScreenSU.End
+
+Program.Sub.Preflight.Start
+Program.Sub.Preflight.End
+
+Program.Sub.Main.Start
+	V.Local.sIcon.Declare(String)
+	
+	F.Intrinsic.String.Build("{0}\ART\gss2.ico",V.Caller.GlobalDir,v.Local.sIcon)
+	Gui.fMain..Icon(V.Local.sIcon)
+	
+	F.Intrinsic.Control.CallSub(connect)
+	F.Intrinsic.Control.CallSub(loaddtmain)
+	F.Intrinsic.Control.CallSub(loadgvmain)
+	
+	Gui.fMain..Show
+
+Program.Sub.Main.End
+
+Program.Sub.Connect.Start
+	F.ODBC.Connection!con.OpenConnection(V.Ambient.PDSN,V.Ambient.PUser,V.Ambient.PPass)
+Program.Sub.Connect.End
+
+Program.Sub.Disconnect.Start
+	F.ODBC.Connection!con.Close
+Program.Sub.Disconnect.End
+
+Program.Sub.fMain_UnLoad.Start
+	gui.fMain..Visible(0)
+	F.Intrinsic.Control.CallSub(disconnect)
+	F.Intrinsic.Control.End
+
+Program.Sub.fMain_UnLoad.End
+
+Program.Sub.cmdSave_Click.Start
+	V.Local.bInstr.Declare
+	V.Local.iFor.Declare
+	V.Local.iPlusOne.Declare
+	V.Local.sGroups.Declare
+	V.Local.sMessage.Declare
+	
+	F.Intrinsic.Control.If(V.DataTable.dtMain.RowCount,>,0)
+		F.Intrinsic.Control.For(V.Local.iFor,0,V.DataTable.dtMain.RowCount--,1)
+			F.Intrinsic.Control.If(V.DataTable.dtMain(V.Local.iFor).RowState,<>,8)
+				'Make sure a group is selected on each row
+				F.Intrinsic.Control.If(V.DataTable.dtMain(V.Local.iFor).GS_GROUP!FieldValTrim,=,"")
+					F.Intrinsic.Math.Add(V.Local.iFor,1,V.Local.iPlusOne)
+					F.Intrinsic.String.Build("Select a group for row {0}",V.Local.iPlusOne,V.Local.sMessage)
+					F.Intrinsic.UI.Msgbox(V.Local.sMessage,"Label Maintenance")
+					F.Intrinsic.Control.ExitSub
+				F.Intrinsic.Control.EndIf
+				'Make sure the booleans are selected
+				F.Intrinsic.Control.If(V.DataTable.dtMain(V.Local.iFor).LABELS!FieldVal,=,True)
+					'Make sure a label printer is selected if the check box is set to true
+					F.Intrinsic.Control.If(V.DataTable.dtMain(V.Local.iFor).LABEL_PRINTER!FieldValTrim,=,"")
+						F.Intrinsic.Math.Add(V.Local.iFor,1,V.Local.iPlusOne)
+						F.Intrinsic.String.Build("Select a label printer for row {0}",V.Local.iPlusOne,V.Local.sMessage)
+						F.Intrinsic.UI.Msgbox(V.Local.sMessage,"Label Maintenance")
+						F.Intrinsic.Control.ExitSub
+					F.Intrinsic.Control.EndIf
+				F.Intrinsic.Control.ElseIf(V.DataTable.dtMain(V.Local.iFor).LABELS!FieldVal,=,False)
+				F.Intrinsic.Control.Else
+					F.Intrinsic.Math.Add(V.Local.iFor,1,V.Local.iPlusOne)
+					F.Intrinsic.String.Build("Check or Uncheck the Label box for row {0}",V.Local.iPlusOne,V.Local.sMessage)
+					F.Intrinsic.UI.Msgbox(V.Local.sMessage,"Label Maintenance")
+					F.Intrinsic.Control.ExitSub
+				F.Intrinsic.Control.EndIf
+				F.Intrinsic.Control.If(V.DataTable.dtMain(V.Local.iFor).RFID!FieldVal,=,True)
+					'Make sure an RFID printer is selected if the check box is set to true
+					F.Intrinsic.Control.If(V.DataTable.dtMain(V.Local.iFor).RFID_PRINTER!FieldValTrim,=,"")
+						F.Intrinsic.Math.Add(V.Local.iFor,1,V.Local.iPlusOne)
+						F.Intrinsic.String.Build("Select an RFID printer for row {0}",V.Local.iPlusOne,V.Local.sMessage)
+						F.Intrinsic.UI.Msgbox(V.Local.sMessage,"Label Maintenance")
+						F.Intrinsic.Control.ExitSub
+					F.Intrinsic.Control.EndIf
+				F.Intrinsic.Control.ElseIf(V.DataTable.dtMain(V.Local.iFor).RFID!FieldVal,=,False)
+				F.Intrinsic.Control.Else
+					F.Intrinsic.Math.Add(V.Local.iFor,1,V.Local.iPlusOne)
+					F.Intrinsic.String.Build("Check or Uncheck the RFID box for row {0}",V.Local.iPlusOne,V.Local.sMessage)
+					F.Intrinsic.UI.Msgbox(V.Local.sMessage,"Label Maintenance")
+					F.Intrinsic.Control.ExitSub
+				F.Intrinsic.Control.EndIf
+				'Make sure there are no duplicates
+				F.Intrinsic.String.IsInString(V.Local.sGroups,V.DataTable.dtMain(V.Local.iFor).GS_GROUP!FieldValTrim,True,V.Local.bInstr)
+				F.Intrinsic.Control.If(V.Local.bInstr,=,False)
+					F.Intrinsic.Control.If(V.Local.sGroups.Trim,=,"")
+						V.Local.sGroups.Set(V.DataTable.dtMain(V.Local.iFor).GS_GROUP!FieldValTrim)
+					F.Intrinsic.Control.Else
+						F.Intrinsic.String.Concat(V.Local.sGroups,"*!*",V.DataTable.dtMain(V.Local.iFor).GS_GROUP!FieldValTrim,V.Local.sGroups)
+					F.Intrinsic.Control.EndIf
+				F.Intrinsic.Control.Else
+					F.Intrinsic.Math.Add(V.Local.iFor,1,V.Local.iPlusOne)
+					F.Intrinsic.String.Build("The Group on row {0} is a duplicate",V.Local.iPlusOne,V.Local.sMessage)
+					F.Intrinsic.UI.Msgbox(V.Local.sMessage,"Label Maintenance")
+					F.Intrinsic.Control.ExitSub
+				F.Intrinsic.Control.EndIf
+			F.Intrinsic.Control.EndIf
+		F.Intrinsic.Control.Next(V.Local.iFor)
+		F.Data.DataTable.SaveToDB("dtMain","con","GCG_6227_RFID_LABEL_GROUP","GS_GROUP",7)
+	F.Intrinsic.Control.EndIf
+	
+	F.Intrinsic.Control.CallSub(fmain_unload)
+
+Program.Sub.cmdSave_Click.End
+
+Program.Sub.loaddtMain.Start
+	V.Local.bExists.Declare
+	V.Local.sSQL.Declare
+	
+	F.ODBC.Connection!con.TableExists("GCG_6227_RFID_LABEL_GROUP",V.Local.bExists)
+	
+	F.Intrinsic.Control.If(V.Local.bExists,=,False)
+		V.Local.sSQL.Set("CREATE TABLE GCG_6227_RFID_LABEL_GROUP( GS_GROUP CHAR(8) NOT NULL , LABEL_PRINTER CHAR(250), RFID_PRINTER CHAR(250), LABELS BIT DEFAULT '0' NOT NULL , RFID BIT DEFAULT '0' NOT NULL )")
+		F.ODBC.Connection!con.Execute(V.Local.sSQL)
+	F.Intrinsic.Control.EndIf
+	
+	V.Local.sSQL.Set("select * from GCG_6227_RFID_LABEL_GROUP")
+	
+	F.Data.DataTable.CreateFromSQL("dtMain","con",V.Local.sSQL,True)
+	F.Data.DataView.Create("dtMain","dvMain")
+Program.Sub.loaddtMain.End
+
+Program.Sub.LoadgvMain.Start
+	V.Local.iIndex.Declare
+	V.Local.sDDL.Declare
+	V.Local.sDefault.Declare
+	V.Local.sDT.Declare
+	V.Local.sDV.Declare
+	V.Local.sGroups.Declare
+	V.Local.sGv.Declare
+	V.Local.sPrinters.Declare
+	V.Local.sProperty.Declare
+	V.Local.sSQL.Declare
+	
+	V.Local.sDT.Set("dtMain")
+	V.Local.sDV.Set("dvMain")
+	V.Local.sGV.Set("gvMain")
+	
+	
+	Gui.fMain.GsGcMain.AddGridviewFromDataview(V.Local.sGV,V.Local.sDT,V.Local.sDV)
+	
+	GUI.fMain.GsGcMain.SetGridviewProperty("gvMAIN","AllowAddRows",True)
+	GUI.fMain.GsGcMain.SetGridviewProperty("gvMAIN","AllowDeleteRows",True)
+	GUI.fMain.GsGcMain.SetGridviewProperty("gvMAIN","Editable",True)
+	
+	'ALLOW EDIT
+	V.Local.sProperty.Set("AllowEdit")
+	V.Local.sDefault.Set("True")
+	GUI.fMain.GsGcMain.SetColumnProperty("gvMAIN","GS_GROUP",V.Local.sProperty,V.Local.sDefault)
+	GUI.fMain.GsGcMain.SetColumnProperty("gvMAIN","LABEL_PRINTER",V.Local.sProperty,V.Local.sDefault)
+	GUI.fMain.GsGcMain.SetColumnProperty("gvMAIN","RFID_PRINTER",V.Local.sProperty,V.Local.sDefault)
+	GUI.fMain.GsGcMain.SetColumnProperty("gvMAIN","LABELS",V.Local.sProperty,V.Local.sDefault)
+	GUI.fMain.GsGcMain.SetColumnProperty("gvMAIN","RFID",V.Local.sProperty,V.Local.sDefault)
+	
+	'READ ONLY
+	V.Local.sProperty.Set("ReadOnly")
+	V.Local.sDefault.Set("False")
+	GUI.fMain.GsGcMain.SetColumnProperty("gvMAIN","GS_GROUP",V.Local.sProperty,V.Local.sDefault)
+	GUI.fMain.GsGcMain.SetColumnProperty("gvMAIN","LABEL_PRINTER",V.Local.sProperty,V.Local.sDefault)
+	GUI.fMain.GsGcMain.SetColumnProperty("gvMAIN","RFID_PRINTER",V.Local.sProperty,V.Local.sDefault)
+	GUI.fMain.GsGcMain.SetColumnProperty("gvMAIN","LABELS",V.Local.sProperty,V.Local.sDefault)
+	GUI.fMain.GsGcMain.SetColumnProperty("gvMAIN","RFID",V.Local.sProperty,V.Local.sDefault)
+	
+	
+	'HEADER FONT BOLD
+	V.Local.sProperty.Set("HeaderFontBold")
+	V.Local.sDefault.Set("True")
+	GUI.fMain.GsGcMain.SetColumnProperty("gvMAIN","GS_GROUP",V.Local.sProperty,V.Local.sDefault)
+	GUI.fMain.GsGcMain.SetColumnProperty("gvMAIN","LABEL_PRINTER",V.Local.sProperty,V.Local.sDefault)
+	GUI.fMain.GsGcMain.SetColumnProperty("gvMAIN","RFID_PRINTER",V.Local.sProperty,V.Local.sDefault)
+	GUI.fMain.GsGcMain.SetColumnProperty("gvMAIN","LABELS",V.Local.sProperty,V.Local.sDefault)
+	GUI.fMain.GsGcMain.SetColumnProperty("gvMAIN","RFID",V.Local.sProperty,V.Local.sDefault)
+	
+	
+	'HEADER BACK COLOR
+	V.Local.sProperty.Set("HeaderBackColor")
+	V.Local.sDefault.Set("MediumSeaGreen")
+	GUI.fMain.GsGcMain.SetColumnProperty("gvMAIN","GS_GROUP",V.Local.sProperty,V.Local.sDefault)
+	GUI.fMain.GsGcMain.SetColumnProperty("gvMAIN","LABEL_PRINTER",V.Local.sProperty,V.Local.sDefault)
+	GUI.fMain.GsGcMain.SetColumnProperty("gvMAIN","RFID_PRINTER",V.Local.sProperty,V.Local.sDefault)
+	GUI.fMain.GsGcMain.SetColumnProperty("gvMAIN","LABELS",V.Local.sProperty,V.Local.sDefault)
+	GUI.fMain.GsGcMain.SetColumnProperty("gvMAIN","RFID",V.Local.sProperty,V.Local.sDefault)
+	
+	'VISIBLE INDEX
+	V.Local.sProperty.Set("VisibleIndex")
+	V.Local.iIndex.Set(0)
+	GUI.fMain.GsGcMain.SetColumnProperty("gvMAIN","GS_GROUP",V.Local.sProperty,V.Local.iIndex)
+	V.Local.iIndex.Set(V.Local.iIndex.++)
+	GUI.fMain.GsGcMain.SetColumnProperty("gvMAIN","LABEL_PRINTER",V.Local.sProperty,V.Local.iIndex)
+	V.Local.iIndex.Set(V.Local.iIndex.++)
+	GUI.fMain.GsGcMain.SetColumnProperty("gvMAIN","RFID_PRINTER",V.Local.sProperty,V.Local.iIndex)
+	V.Local.iIndex.Set(V.Local.iIndex.++)
+	GUI.fMain.GsGcMain.SetColumnProperty("gvMAIN","LABELS",V.Local.sProperty,V.Local.iIndex)
+	V.Local.iIndex.Set(V.Local.iIndex.++)
+	GUI.fMain.GsGcMain.SetColumnProperty("gvMAIN","RFID",V.Local.sProperty,V.Local.iIndex)
+	V.Local.iIndex.Set(V.Local.iIndex.++)
+	
+	
+	'TAB STOP
+	V.Local.sProperty.Set("TabStop")
+	
+	'CAPTION
+	V.Local.sProperty.Set("Caption")
+	GUI.fMain.GsGcMain.SetColumnProperty("gvMAIN","GS_GROUP",V.Local.sProperty,"Group")
+	GUI.fMain.GsGcMain.SetColumnProperty("gvMAIN","LABEL_PRINTER",V.Local.sProperty,"Label Printer")
+	GUI.fMain.GsGcMain.SetColumnProperty("gvMAIN","RFID_PRINTER",V.Local.sProperty,"RFID Printer")
+	GUI.fMain.GsGcMain.SetColumnProperty("gvMAIN","LABELS",V.Local.sProperty,"Labels")
+	GUI.fMain.GsGcMain.SetColumnProperty("gvMAIN","RFID",V.Local.sProperty,"RFID")
+	
+	'MIN WIDTH
+	V.Local.sProperty.Set("MinWidth")
+	V.Local.sDefault.Set("70")
+	GUI.fMain.GsGcMain.SetColumnProperty("gvMAIN","GS_GROUP",V.Local.sProperty,V.Local.sDefault)
+	GUI.fMain.GsGcMain.SetColumnProperty("gvMAIN","LABEL_PRINTER",V.Local.sProperty,200)
+	GUI.fMain.GsGcMain.SetColumnProperty("gvMAIN","RFID_PRINTER",V.Local.sProperty,200)
+	GUI.fMain.GsGcMain.SetColumnProperty("gvMAIN","LABELS",V.Local.sProperty,V.Local.sDefault)
+	GUI.fMain.GsGcMain.SetColumnProperty("gvMAIN","RFID",V.Local.sProperty,V.Local.sDefault)
+	
+	
+	'MAX WIDTH
+	V.Local.sProperty.Set("MaxWidth")
+	V.Local.sDefault.Set("100")
+	
+	'CELL H ALIGNMENT
+	V.Local.sProperty.Set("CellHAlignment")
+	V.Local.sDefault.Set("Center")
+	GUI.fMain.GsGcMain.SetColumnProperty("gvMAIN","LABELS",V.Local.sProperty,V.Local.sDefault)
+	GUI.fMain.GsGcMain.SetColumnProperty("gvMAIN","RFID",V.Local.sProperty,V.Local.sDefault)
+	
+	'CELL FONT BOLD
+	V.Local.sProperty.Set("CellFontBold")
+	V.Local.sDefault.Set("True")
+	
+	'CELL BACK COLOR
+	V.Local.sProperty.Set("CellBackColor")
+	
+	'DISPLAY CUSTOM NUMERIC
+	V.Local.sProperty.Set("DisplayCustomNumeric")
+	
+	'VISIBLE
+	V.Local.sProperty.Set("Visible")
+	
+	
+	'DATE FORMAT FOR DATE
+	
+	'COLUMN EDIT FOR UOM DROP DOWN LIST
+	V.Local.sProperty.Set("DropDownList")
+	'Set Drop Down for Security Groups
+	Function.Global.Security.GetAllUserGroups(V.Caller.CompanyCode,V.Local.sGroups)
+	Gui.fMain.GsGcMain.ColumnEdit(V.Local.sGv,"GS_GROUP",V.Local.sProperty,V.Local.sGroups)
+	'Set Drop Down for Label Printers and RFID Printers
+	V.Local.sSQL.Set("select SENTINELALIAS from SERVER_PRINTERS where SENTINELALIAS <> ''")
+	F.ODBC.Connection!com.OpenConnection(V.Ambient.Ccon,V.Ambient.Cuser,V.Ambient.Cpass)
+	F.ODBC.Connection!com.OpenLocalRecordsetRO("rstSel",V.Local.sSQL)
+	F.Intrinsic.Control.DoUntil(V.ODBC.com!rstSel.EOF,=,True)
+		F.Intrinsic.Control.If(V.Local.sPrinters.Trim,=,"")
+			V.Local.sPrinters.Set(V.ODBC.com!rstSel.FieldValTrim!SENTINELALIAS)
+		F.Intrinsic.Control.Else
+			F.Intrinsic.String.Concat(V.Local.sPrinters,"*!*",V.ODBC.com!rstSel.FieldValTrim!SENTINELALIAS,v.Local.sPrinters)
+		F.Intrinsic.Control.EndIf
+		F.ODBC.com!rstSel.MoveNext
+	F.Intrinsic.Control.Loop
+	F.ODBC.com!rstSel.Close
+	F.ODBC.Connection!com.Close
+	Gui.fMain.GsGcMain.ColumnEdit(V.Local.sGv,"LABEL_PRINTER",V.Local.sProperty,V.Local.sPrinters)
+	Gui.fMain.GsGcMain.ColumnEdit(V.Local.sGv,"RFID_PRINTER",V.Local.sProperty,V.Local.sPrinters)
+	
+	Gui.fMain.GsGCMain.MainView(V.Local.sGV)
+
+Program.Sub.LoadgvMain.End
+
+Program.Sub.Comments.Start
+${$0$}$GAB_RFID_LABEL_MAINT$}$JWERTH$}$9/5/2017 10:36:28 AM$}$False
+${$3$}$0$}$$}$0$}$-1$}$$}$12:00:00 AM$}$THIS PROJECT WILL PRESENT THE USER WITH A SCREEN THAT ALLOWS THEM TO CONNECT LABEL PRINTERS TO SECURITY GROUPS.
+Program.Sub.Comments.End
